@@ -72,18 +72,34 @@ function getDocumentForPath(path, page) {
     return getDocument(path);
 }
 
+function forEachElement(list, callback) {
+    if (!list) return;
+    var size = (typeof list.size === "function") ? list.size() : (list.length || 0);
+    for (var i = 0; i < size; i++) {
+        var el = (typeof list.get === "function") ? list.get(i) : list[i];
+        if (el) {
+            callback(el, i);
+        }
+    }
+}
+
+function getElementsSize(list) {
+    if (!list) return 0;
+    return (typeof list.size === "function") ? list.size() : (list.length || 0);
+}
+
 function execute(url, page) {
     if (!page) page = 1;
     var doc = getDocumentForPath(url, page);
     if (!doc) return Response.error("Không thể kết nối đến máy chủ MyReadingManga.");
 
     var articles = doc.select("article");
-    if (articles.size() === 0) {
+    if (getElementsSize(articles) === 0) {
         articles = doc.select(".post");
     }
 
     var listBook = [];
-    articles.forEach(article => {
+    forEachElement(articles, function(article) {
         var titleEl = article.select(".entry-title a").first() || article.select("h2 a").first() || article.select("a").first();
         if (!titleEl) return;
 

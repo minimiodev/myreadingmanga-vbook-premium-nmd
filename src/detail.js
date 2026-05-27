@@ -60,6 +60,17 @@ function getDocumentForPath(path) {
     return getDocument(path);
 }
 
+function forEachElement(list, callback) {
+    if (!list) return;
+    var size = (typeof list.size === "function") ? list.size() : (list.length || 0);
+    for (var i = 0; i < size; i++) {
+        var el = (typeof list.get === "function") ? list.get(i) : list[i];
+        if (el) {
+            callback(el, i);
+        }
+    }
+}
+
 function execute(url) {
     var doc = getDocumentForPath(url);
     if (!doc) return Response.error("Không thể kết nối đến máy chủ MyReadingManga.");
@@ -104,7 +115,7 @@ function execute(url) {
     var categories = doc.select("a[href*='/category/']");
     if (categories.size() > 0) {
         var catNames = [];
-        categories.forEach(cat => {
+        forEachElement(categories, function(cat) {
             var txt = cat.text().trim();
             if (txt) catNames.push(txt);
         });
@@ -116,7 +127,7 @@ function execute(url) {
     var tags = doc.select("a[rel='tag']");
     if (tags.size() > 0) {
         var tagNames = [];
-        tags.forEach(tag => {
+        forEachElement(tags, function(tag) {
             var txt = tag.text().trim();
             if (txt) tagNames.push(txt);
         });

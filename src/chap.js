@@ -60,6 +60,17 @@ function getDocumentForPath(path) {
     return getDocument(path);
 }
 
+function forEachElement(list, callback) {
+    if (!list) return;
+    var size = (typeof list.size === "function") ? list.size() : (list.length || 0);
+    for (var i = 0; i < size; i++) {
+        var el = (typeof list.get === "function") ? list.get(i) : list[i];
+        if (el) {
+            callback(el, i);
+        }
+    }
+}
+
 function execute(url) {
     var doc1 = getDocumentForPath(url);
     if (!doc1) return Response.error("Không thể kết nối đến máy chủ MyReadingManga.");
@@ -69,7 +80,7 @@ function execute(url) {
 
     function extractImages(doc) {
         var images = doc.select(".entry-content img, article img, .post img");
-        images.forEach(img => {
+        forEachElement(images, function(img) {
             var src = img.attr("data-src") || img.attr("data-lazy-src") || img.attr("data-original") || img.attr("src") || "";
             src = src.trim();
             if (!src) return;
@@ -115,7 +126,7 @@ function execute(url) {
         basePath = basePath.substring(0, basePath.length - 1);
     }
 
-    pageLinks.forEach(link => {
+    forEachElement(pageLinks, function(link) {
         var href = link.attr("href");
         if (!href) return;
 
@@ -139,7 +150,7 @@ function execute(url) {
         }
     });
 
-    otherPageUrls.forEach(pageUrl => {
+    forEachElement(otherPageUrls, function(pageUrl) {
         try {
             var docN = getDocumentForPath(pageUrl);
             if (docN) {
