@@ -1,15 +1,10 @@
 var DOMAINS = [
-    "https://myreadingmanga.info",
-    "https://myreadingmanga.to",
-    "https://myreadingmanga.xyz"
+    "https://myreadingmanga.info"
 ];
 
 function getDocument(url) {
-    var headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    };
     try {
-        var response = fetch(url, { headers: headers });
+        var response = fetch(url);
         var html = response.text();
         if (html && (html.indexOf("cf-challenge") !== -1 || html.indexOf("Cloudflare") !== -1 || html.indexOf("Please enable JS") !== -1)) {
             return getDocumentWithBrowser(url);
@@ -23,7 +18,6 @@ function getDocument(url) {
 function getDocumentWithBrowser(url) {
     var browser = Engine.newBrowser();
     try {
-        browser.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
         var doc = browser.launch(url, 8000);
         return doc;
     } catch (e) {
@@ -69,7 +63,11 @@ function getDocumentForPath(path, page) {
             // Try next domain
         }
     }
-    return getDocument(path);
+    
+    if (path.indexOf("http") === 0) {
+        return getDocument(path);
+    }
+    return null;
 }
 
 function forEachElement(list, callback) {
