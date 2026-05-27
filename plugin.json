@@ -1,0 +1,14 @@
+[
+  {
+    "name": "MyReadingManga",
+    "author": "Nguyễn Mạnh Dũng",
+    "version": 100,
+    "source": "https://myreadingmanga.info",
+    "regexp": "https?:\\/\\/(myreadingmanga\\.(info|to|xyz))\\/.*",
+    "description": "Tiện ích mở rộng siêu nâng cao cho MyReadingManga - Tác giả Nguyễn Mạnh Dũng. Hỗ trợ tự động vượt Cloudflare, gộp nhiều trang thành 1 chương duy nhất và tự động chuyển đổi sang tên miền hoạt động khi bị chặn.",
+    "locale": "vi_VN",
+    "tag": "nsfw",
+    "type": "comic",
+    "path": "myreadingmanga_vbook.zip"
+  }
+]
